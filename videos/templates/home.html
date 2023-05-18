@@ -1,0 +1,104 @@
+{% comment %} {% extends 'base.html' %} {% endcomment %}
+
+{% block title %}MyTube{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Effortlessly host and subtitle your videos with MyTube</h1>
+        <p>Easily upload your videos and let us handle the rest.<br> Our platform automatically generates subtitles, making them searchable.</p>
+
+        <form method="GET" action="{% url 'video-list' %}">
+            <input type="text" name="keyword" placeholder="Enter a keyword">
+            <button type="submit">Search</button>
+        </form>
+
+        <hr>
+
+            <form method="POST" enctype="multipart/form-data" action="{% url 'videos:upload_video' %}">
+
+            {% csrf_token %}
+            <input type="file" name="video_file">
+            <button type="submit">Upload Video</button>
+        </form>
+
+        {% if segments %}
+            <hr>
+            <h2>Search Results:</h2>
+            <ul>
+            {% for segment in segments %}
+                <li>Time segment: {{ segment.start_time }} - {{ segment.end_time }}</li>
+                <li>Subtitle: {{ segment.text }}</li>
+                <hr>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        <a href="{% url 'video-list' %}">View Uploaded Videos</a>
+    </div>
+
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
